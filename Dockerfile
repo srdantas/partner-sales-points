@@ -4,7 +4,7 @@ COPY . /app
 WORKDIR /app
 
 ENV FLASK_ENV=development \
-    FLASK_APP=partner
+    FLASK_APP=partners
 
 RUN pip install .
 
