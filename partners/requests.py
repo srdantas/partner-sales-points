@@ -16,7 +16,7 @@ partner_schema = {
 }
 
 
-def validate_partner_body():
+def partner_body():
     body = json.loads(request.data)
     validator = cerberus.Validator(partner_schema)
     if validator.validate(body):
@@ -25,7 +25,7 @@ def validate_partner_body():
         raise werkzeug.exceptions.BadRequest('Invalid payload')
 
 
-def validate_search_query_string():
+def search_query_string():
     lat = request.args.get('lat')
     lon = request.args.get('lon')
     if not lat or not lon:

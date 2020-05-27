@@ -5,7 +5,7 @@ def create_partner(partner):
     return partners.database.insert(partner)
 
 
-def find_partner(partner_id):
+def get_partner(partner_id):
     return partners.database.get(partner_id)
 
 
