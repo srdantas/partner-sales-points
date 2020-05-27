@@ -1,17 +1,13 @@
-import json
-
 import werkzeug
-from flask import request
 
 import partners
 import partners.partner
-from partners import validators
+from partners import request_validators
 
 
 @partners.app.route('/partners', methods=['POST'])
 def create_partner():
-    data = json.loads(request.data)
-    body = validators.validate_partner_body(data)
+    body = request_validators.validate_partner_body()
     if partners.partner.create_partner(body).inserted_id:
         return '', 201
     else:
@@ -29,9 +25,8 @@ def get_partner(partner_id=None):
 
 @partners.app.route('/partners', methods=['GET'])
 def search_partner_by_point():
-    lat = request.args.get('lat')
-    lon = request.args.get('lon')
-    results = partners.partner.search_partner(float(lat), float(lon))
+    lat, lon = request_validators.validate_search_query_string()
+    results = partners.partner.search_partner(lat, lon)
     return {'results': results, 'size': len(results)}, 200
 
 
@@ -42,5 +37,4 @@ def handle_exception(e):
 
 @partners.app.errorhandler(Exception)
 def handle_exception(e):
-    print(e)
-    return {'message': 'Sorry, you can retry in a feel minutes'}, 500
+    return {'message': str(e)}, 500
