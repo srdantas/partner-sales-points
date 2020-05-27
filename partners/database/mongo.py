@@ -29,10 +29,7 @@ def insert_partner(partner):
 
 def get_partner(partner_id):
     partner = get_collection().find_one({'_id': partner_id})
-    if partner:
-        return mapper.partner_from_document(partner)
-    else:
-        return None
+    return mapper.partner_from_document(partner) if partner else None
 
 
 def search_partner_coverage(lat, lon):

@@ -8,19 +8,13 @@ from partners import requests
 @partners.app.route('/partners', methods=['POST'])
 def create_partner():
     body = partners.requests.partner_body()
-    if partners.partner.create_partner(body).inserted_id:
-        return '', 201
-    else:
-        raise werkzeug.exceptions.InternalServerError('Error for save partner')
+    partners.partner.create_partner(body)
+    return '', 201
 
 
 @partners.app.route('/partners/<partner_id>', methods=['GET'])
 def get_partner(partner_id=None):
-    partner = partners.partner.get_partner(partner_id)
-    if partner:
-        return partner, 200
-    else:
-        raise werkzeug.exceptions.NotFound(f'partner {partner_id} not found')
+    return partners.partner.get_partner(partner_id), 200
 
 
 @partners.app.route('/partners', methods=['GET'])
@@ -31,7 +25,7 @@ def search_partner_by_point():
 
 
 @partners.app.errorhandler(werkzeug.exceptions.HTTPException)
-def handle_exception(e):
+def handle_http_exception(e):
     return {'message': e.description}, e.code
 
 
