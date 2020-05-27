@@ -18,5 +18,8 @@ sudo docker run -p 5000:5000 partner-sales-points
 
 When you like local run the app, you can run this:
 ```shell script
-pip install . && flask run
+export FLASK_ENV=development && \
+export FLASK_APP=partners && \
+pip install . && \
+flask run
 ```
