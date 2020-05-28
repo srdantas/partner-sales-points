@@ -10,5 +10,7 @@ setup(
         'werkzeug',
         'pymongo'
     ],
-    extras_require={"test": ['pytest', 'coverage', 'mongomock']}
+    extras_require={"test": ['pytest',
+                             'coverage',
+                             'mongomock']}
 )
