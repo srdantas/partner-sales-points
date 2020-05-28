@@ -6,7 +6,7 @@ def create_partner(partner):
 
 
 def get_partner(partner_id):
-    return partners.database.get(partner_id)
+    return partners.database.get_by_id(partner_id)
 
 
 def search_partner(lat, lon):

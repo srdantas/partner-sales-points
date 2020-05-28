@@ -27,7 +27,7 @@ def insert_partner(partner):
     return get_collection().insert_one(partner_document)
 
 
-def get_partner(partner_id):
+def get_partner_by_id(partner_id):
     partner = get_collection().find_one({'_id': partner_id})
     return mapper.partner_from_document(partner) if partner else None
 
