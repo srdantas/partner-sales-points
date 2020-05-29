@@ -1,11 +1,15 @@
 import random
 
 
-def generate_id():
+def id():
     return str(random.randint(1, 100000))
 
 
-def generate_document():
+def point():
+    return random.uniform(1.1, 1.9)
+
+
+def document():
     """This random cnpj generator is from this link:
     https://gist.github.com/lucascnr/24c70409908a31ad253f97f9dd4c6b7c"""
 

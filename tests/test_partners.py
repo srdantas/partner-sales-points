@@ -81,17 +81,23 @@ def test_search_partners_when_query_string_param_lon_not_is_float(client, lon, l
     assert {'message': 'Invalid request, we need lat and lon params are float values'} == json.loads(response.data)
 
 
-def test_search_partners_when_have_zero_in_coverage_area(client):
-    pass
+@pytest.mark.parametrize("lon,lat", [(random.randint(1, 10), random.randint(1, 10)),
+                                     (random.randint(1, 10), random.randint(1, 10))])
+def test_search_partners_when_have_zero_in_coverage_area(client, lon, lat):
+    response = client.get(f'/partners?lat={lat}&lon={lon}')
+    assert 200 == response.status_code
+    assert {'results': []} == json.loads(response.data)
 
 
-def test_search_partners_when_have_one_in_coverage_area(client):
-    pass
+def test_search_partners_when_inside_coverage_area(valid_partner, client):
+    response = client.post('/partners', json=valid_partner)
+    assert 201 == response.status_code
 
+    coordinates = valid_partner['address']['coordinates']
 
-def test_search_partners_when_have_two_in_coverage_area_then_result_is_sorted_by_address(client):
-    pass
+    response = client.get(f'/partners?lat={coordinates[0]}&lon={coordinates[1]}')
+    assert 200 == response.status_code
 
-
-def test_search_partners_when_have_five_in_coverage_area_then_result_is_sorted_by_address(client):
-    pass
+    body = json.loads(response.data)
+    assert 'results' in body
+    assert 0 < len(body['results'])

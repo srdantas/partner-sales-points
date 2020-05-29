@@ -28,7 +28,7 @@ def get_partner(partner_id=None):
 def search_partner_by_point():
     lat, lon = partners.requests.search_query_string()
     results = partners.partner.search_partner(lat, lon)
-    return {'results': results, 'size': len(results)}, 200
+    return {'results': results}, 200
 
 
 @partners.app.errorhandler(werkzeug.exceptions.HTTPException)
