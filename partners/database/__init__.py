@@ -1,5 +1,5 @@
-from partners.database.mongo import insert_partner, get_partner_by_id, search_partner_coverage
+import partners.database.mongo
 
-insert = insert_partner
-get_by_id = get_partner_by_id
-search_coverage = search_partner_coverage
+insert = partners.database.mongo.insert_partner
+get_by_id = partners.database.mongo.get_partner_by_id
+search_coverage = partners.database.mongo.search_partner_coverage

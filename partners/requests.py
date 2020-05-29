@@ -1,8 +1,8 @@
 import json
 
 import cerberus
+import flask
 import werkzeug
-from flask import request
 
 geo_json_schema = {'type': {'type': 'string', 'required': True}, 'coordinates': {'type': 'list', 'required': True}}
 
@@ -17,7 +17,7 @@ partner_schema = {
 
 
 def partner_body():
-    body = json.loads(request.data)
+    body = json.loads(flask.request.data)
     validator = cerberus.Validator(partner_schema)
     if validator.validate(body):
         return body
@@ -26,8 +26,8 @@ def partner_body():
 
 
 def search_query_string():
-    lat = request.args.get('lat')
-    lon = request.args.get('lon')
+    lat = flask.request.args.get('lat')
+    lon = flask.request.args.get('lon')
     if not lat or not lon:
         raise werkzeug.exceptions.BadRequest('Invalid request, we need lat and lon params')
     else:

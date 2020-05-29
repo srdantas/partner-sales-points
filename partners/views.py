@@ -2,7 +2,7 @@ import werkzeug
 
 import partners
 import partners.partner
-from partners import requests
+import partners.requests
 
 
 @partners.app.route('/partners', methods=['POST'])

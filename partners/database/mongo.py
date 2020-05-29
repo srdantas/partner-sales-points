@@ -1,8 +1,8 @@
+import flask
 import pymongo
-from flask import g
-from pymongo.errors import DuplicateKeyError
+import pymongo.errors
 
-from partners.database import mapper
+import partners.database.mapper
 
 
 def init_client():
@@ -14,26 +14,26 @@ def init_client():
     partners_collection.create_index([("address", pymongo.GEOSPHERE)])
     partners_collection.create_index([("coverageArea", pymongo.GEOSPHERE)])
 
-    g.collection = partners_collection
+    flask.g.collection = partners_collection
 
 
 def get_collection():
-    if 'collection' not in g:
+    if 'collection' not in flask.g:
         init_client()
-    return g.collection
+    return flask.g.collection
 
 
 def insert_partner(partner):
-    partner_document = mapper.partner_to_document(partner)
+    partner_document = partners.database.mapper.partner_to_document(partner)
     try:
         get_collection().insert_one(partner_document)
-    except DuplicateKeyError:
+    except pymongo.errors.DuplicateKeyError:
         raise ValueError('Id or document already exists in database')
 
 
 def get_partner_by_id(partner_id):
     partner = get_collection().find_one({'_id': partner_id})
-    return mapper.partner_from_document(partner) if partner else None
+    return partners.database.mapper.partner_from_document(partner) if partner else None
 
 
 def search_partner_coverage(lat, lon):
@@ -50,4 +50,4 @@ def search_partner_coverage(lat, lon):
         {'$sort': {'dist.calculated': 1}}
     ]
     results = get_collection().aggregate(pipeline)
-    return list(map(mapper.partner_from_document, results))
+    return list(map(partners.database.mapper.partner_from_document, results))
