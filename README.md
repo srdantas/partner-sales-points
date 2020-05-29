@@ -12,6 +12,22 @@ Has three modules:
 - partners: views and services with business rules there.
 - tests: all unit tests off app inside there.
 
+## Run
+
+This app required a localhost instance of mongodb running, for it you can use the docker compose that exists there.
+And for run by docker compose run this:
+```shell script
+docker-compose up
+```
+
+And for run, as a flask app:
+```shell script
+export FLASK_ENV=development && \
+export FLASK_APP=partners && \
+pip install . && \
+flask run
+```
+
 ## Tests
 _All tests found here run with *testcontainer-python*. 
 Why? because I cant found a good option of embedded mongo for unittests and testcontainers are a so good framework_
@@ -25,24 +41,10 @@ pytest
 ## Build a docker image
 for build, run this command:
 ```shell script
-sudo docker build -t partner-sales-points .
+docker build -t partner-sales-points .
 ```
 
 for run that:
 ```shell script
-sudo docker run -p 5000:5000 partner-sales-points
-```
-
-When you like local run the app, you can run this:
-```shell script
-export FLASK_ENV=development && \
-export FLASK_APP=partners && \
-pip install . && \
-flask run
-```
-
-This app required a localhost instance of mongodb running, for it you can use the docker compose that exists there.
-And for run by docker compose run this:
-```shell script
-docker-compose up
+docker run -p 5000:5000 partner-sales-points
 ```
