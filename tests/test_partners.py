@@ -19,7 +19,7 @@ def test_create_partner_when_duplicated_document(valid_partner, client):
 
     second_response = client.post('/partners', json=valid_partner)
     assert 400 == second_response.status_code
-    assert {'message': 'This document already exists in database'} == json.loads(second_response.data)
+    assert {'message': 'Id or document already exists in database'} == json.loads(second_response.data)
 
 
 def test_create_partner_when_duplicated_id(valid_partner, client):
@@ -28,7 +28,7 @@ def test_create_partner_when_duplicated_id(valid_partner, client):
 
     second_response = client.post('/partners', json=valid_partner)
     assert 400 == second_response.status_code
-    assert {'message': 'This id already exists in database'} == json.loads(response.data)
+    assert {'message': 'Id or document already exists in database'} == json.loads(second_response.data)
 
 
 def test_create_partner_when_invalid_payload_schema(invalid_partners, client):
