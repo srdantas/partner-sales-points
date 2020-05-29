@@ -1,18 +1,15 @@
 import json
 import random
 
-import mongomock
 import pytest
 
 
-@mongomock.patch()
 def test_create_partner_when_success(valid_partner, client):
     response = client.post('/partners', json=valid_partner)
     assert 201 == response.status_code
     assert b'' == response.data
 
 
-@mongomock.patch()
 def test_create_partner_when_duplicated_document(valid_partner, client):
     response = client.post('/partners', json=valid_partner)
     assert 201 == response.status_code
@@ -25,7 +22,6 @@ def test_create_partner_when_duplicated_document(valid_partner, client):
     assert {'message': 'This document already exists in database'} == json.loads(second_response.data)
 
 
-@mongomock.patch()
 def test_create_partner_when_duplicated_id(valid_partner, client):
     response = client.post('/partners', json=valid_partner)
     assert 201 == response.status_code
@@ -35,7 +31,6 @@ def test_create_partner_when_duplicated_id(valid_partner, client):
     assert {'message': 'This id already exists in database'} == json.loads(response.data)
 
 
-@mongomock.patch()
 def test_create_partner_when_invalid_payload_schema(invalid_partners, client):
     for partner in invalid_partners:
         response = client.post('/partners', json=partner)
@@ -43,7 +38,6 @@ def test_create_partner_when_invalid_payload_schema(invalid_partners, client):
         assert {'message': 'Invalid payload'} == json.loads(response.data)
 
 
-@mongomock.patch()
 def test_get_partner_when_success(valid_partner, client):
     create_response = client.post('/partners', json=valid_partner)
     assert 201 == create_response.status_code
@@ -54,13 +48,11 @@ def test_get_partner_when_success(valid_partner, client):
     assert valid_partner == json.loads(response.data)
 
 
-@mongomock.patch()
 def test_get_partner_when_partner_not_found(client):
     response = client.get(f'/partners/{random.randint(0, 1000)}')
     assert 404 == response.status_code
 
 
-@mongomock.patch()
 @pytest.mark.parametrize("lon,lat", [(1, None), (2, None)])
 def test_search_partners_when_query_string_param_without_lat(client, lon, lat):
     response = client.get(f'/partners?lon={lon}')
@@ -68,7 +60,6 @@ def test_search_partners_when_query_string_param_without_lat(client, lon, lat):
     assert {'message': 'Invalid request, we need lat and lon params'} == json.loads(response.data)
 
 
-@mongomock.patch()
 @pytest.mark.parametrize("lon,lat", [(None, 1), (None, 2)])
 def test_search_partners_when_query_string_param_without_lon(client, lon, lat):
     response = client.get(f'/partners?lat={lat}')
@@ -76,7 +67,6 @@ def test_search_partners_when_query_string_param_without_lon(client, lon, lat):
     assert {'message': 'Invalid request, we need lat and lon params'} == json.loads(response.data)
 
 
-@mongomock.patch()
 @pytest.mark.parametrize("lon,lat", [(1, 'hello'), (2, '1test')])
 def test_search_partners_when_query_string_param_lat_not_is_float(client, lon, lat):
     response = client.get(f'/partners?lat={lat}a&lon={lon}')
@@ -84,7 +74,6 @@ def test_search_partners_when_query_string_param_lat_not_is_float(client, lon, l
     assert {'message': 'Invalid request, we need lat and lon params are float values'} == json.loads(response.data)
 
 
-@mongomock.patch()
 @pytest.mark.parametrize("lon,lat", [('1then', 1), ('2there', 2)])
 def test_search_partners_when_query_string_param_lon_not_is_float(client, lon, lat):
     response = client.get(f'/partners?lat={lat}&lon={lon}')

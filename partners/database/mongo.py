@@ -1,5 +1,6 @@
 import pymongo
 from flask import g
+from pymongo.errors import DuplicateKeyError
 
 from partners.database import mapper
 
@@ -24,7 +25,10 @@ def get_collection():
 
 def insert_partner(partner):
     partner_document = mapper.partner_to_document(partner)
-    return get_collection().insert_one(partner_document)
+    try:
+        get_collection().insert_one(partner_document)
+    except DuplicateKeyError:
+        raise ValueError('Id or document already exists in database')
 
 
 def get_partner_by_id(partner_id):

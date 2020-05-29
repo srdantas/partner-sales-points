@@ -12,5 +12,5 @@ setup(
     ],
     extras_require={"tests": ['pytest',
                               'coverage',
-                              'mongomock']}
+                              'testcontainers']}
 )

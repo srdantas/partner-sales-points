@@ -8,13 +8,20 @@ from partners import requests
 @partners.app.route('/partners', methods=['POST'])
 def create_partner():
     body = partners.requests.partner_body()
-    partners.partner.create_partner(body)
-    return '', 201
+    try:
+        partners.partner.create_partner(body)
+        return '', 201
+    except ValueError as e:
+        raise werkzeug.exceptions.BadRequest(str(e))
 
 
 @partners.app.route('/partners/<partner_id>', methods=['GET'])
 def get_partner(partner_id=None):
-    return partners.partner.get_partner(partner_id), 200
+    result = partners.partner.get_partner(partner_id)
+    if result:
+        return result, 200
+    else:
+        raise werkzeug.exceptions.NotFound(f'{partner_id} not found')
 
 
 @partners.app.route('/partners', methods=['GET'])
